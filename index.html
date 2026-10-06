@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aria AI</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: #0b1020;
+        color: white;
+        min-height: 100vh;
+        transition: 0.3s ease;
+      }
+
+      body.light {
+        background: #f4f6fb;
+        color: #111827;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .app {
+        display: flex;
+        height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        background: #11182d;
+        padding: 22px;
+        border-left: 1px solid #26304a;
+      }
+
+      body.light .sidebar {
+        background: white;
+        border-left: 1px solid #ddd;
+      }
+
+      .logo {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 35px;
+      }
+
+      .logo span {
+        color: #7c5cff;
+      }
+
+      .new-chat {
+        width: 100%;
+        padding: 13px;
+        border: none;
+        border-radius: 12px;
+        background: #7c5cff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .new-chat:hover {
+        filter: brightness(1.08);
+      }
+
+      .menu {
+        margin-top: 25px;
+      }
+
+      .menu button {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 8px;
+        border: none;
+        background: transparent;
+        color: #b9c1d9;
+        text-align: right;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      .menu button:hover {
+        background: #202943;
+        color: white;
+      }
+
+      .chat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        height: 70px;
+        border-bottom: 1px solid #26304a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 25px;
+      }
+
+      body.light .header {
+        border-color: #ddd;
+      }
+
+      .status {
+        color: #6ee7b7;
+        font-size: 14px;
+      }
+
+      .theme {
+        border: none;
+        background: #202943;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      body.light .theme {
+        background: #eef2ff;
+        color: #1f2937;
+      }
+
+      .messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 35px;
+      }
+
+      .welcome {
+        text-align: center;
+        margin-top: 80px;
+      }
+
+      .welcome h1 {
+        font-size: 42px;
+        margin-bottom: 12px;
+      }
+
+      .welcome p {
+        color: #9ca8c7;
+        font-size: 18px;
+      }
+
+      body.light .welcome p {
+        color: #475569;
+      }
+
+      .message {
+        max-width: 750px;
+        margin: 18px auto;
+        padding: 16px 20px;
+        border-radius: 16px;
+        line-height: 1.6;
+        animation: appear 0.25s ease;
+        white-space: pre-wrap;
+      }
+
+      .user {
+        background: #7c5cff;
+      }
+
+      .ai {
+        background: #18213a;
+      }
+
+      body.light .ai {
+        background: white;
+        box-shadow: 0 3px 15px #ddd;
+      }
+
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .input-area {
+        padding: 20px 30px;
+      }
+
+      .input-box {
+        max-width: 850px;
+        margin: auto;
+        display: flex;
+        background: #151e35;
+        border: 1px solid #303b5c;
+        border-radius: 18px;
+        padding: 8px;
+      }
+
+      body.light .input-box {
+        background: white;
+        border-color: #ddd;
+      }
+
+      .input-box input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: white;
+        font-size: 16px;
+        padding: 12px;
+      }
+
+      body.light .input-box input {
+        color: #111;
+      }
+
+      .send {
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 14px;
+        background: #7c5cff;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 860px) {
+        .app {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          border-left: none;
+          border-bottom: 1px solid #26304a;
+        }
+
+        .messages {
+          padding: 20px 16px;
+        }
+
+        .welcome h1 {
+          font-size: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="logo">Aria <span>AI</span></div>
+        <button class="new-chat" id="newChat">צ'אט חדש</button>
+
+        <div class="menu">
+          <button>שיחות אחרונות</button>
+          <button>העדפות</button>
+          <button>היסטוריה</button>
+          <button>עזרה</button>
+        </div>
+      </aside>
+
+      <main class="chat">
+        <div class="header">
+          <div class="status">● מחובר</div>
+          <button class="theme" id="themeToggle">מצב לילה</button>
+        </div>
+
+        <div class="messages" id="messages">
+          <div class="welcome">
+            <h1>שלום! I'm Aria</h1>
+            <p>איך אוכל לעזור לך היום?</p>
+          </div>
+        </div>
+
+        <div class="input-area">
+          <div class="input-box">
+            <input id="userInput" type="text" placeholder="כתוב את השאלה שלך..." />
+            <button class="send" id="sendBtn" aria-label="שלח">➤</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const body = document.body;
+      const messages = document.getElementById('messages');
+      const input = document.getElementById('userInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const themeToggle = document.getElementById('themeToggle');
+      const newChatBtn = document.getElementById('newChat');
+
+      function createMessage(text, type) {
+        const msg = document.createElement('div');
+        msg.className = 'message ' + type;
+        msg.textContent = text;
+        messages.appendChild(msg);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function sendMessage() {
+        const value = input.value.trim();
+        if (!value) return;
+
+        createMessage(value, 'user');
+        input.value = '';
+
+        setTimeout(() => {
+          const responses = [
+            'כמובן! אני כאן כדי לעזור.',
+            'זה רעיון טוב, בוא נפתור את זה יחד.',
+            'אני יכול לסייע לך בזה בשניות.',
+            'הנה מה שאני יכול להציע לך.'
+          ];
+          const answer = responses[Math.floor(Math.random() * responses.length)];
+          createMessage(answer, 'ai');
+        }, 500);
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+
+      themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light');
+        themeToggle.textContent = body.classList.contains('light') ? 'מצב יום' : 'מצב לילה';
+      });
+
+      newChatBtn.addEventListener('click', () => {
+        messages.innerHTML = `
+          <div class="welcome">
+            <h1>שלום! I'm Aria</h1>
+            <p>איך אוכל לעזור לך היום?</p>
+          </div>
+        `;
+      });
+    </script>
+  </body>
+</html>
